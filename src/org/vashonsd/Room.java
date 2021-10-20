@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class Room {
 
-    public enum Direction {EAST, WEST, NORTH, SOUTH, UP, DOWN} // Probably better to keep them as strings, but we'll see
-    HashMap<Direction, Room> nearbyRooms = new HashMap<>();
+    // public enum Direction {EAST, WEST, NORTH, SOUTH, UP, DOWN}
+    HashMap<String, Room> nearbyRooms = new HashMap<>();
 
     ArrayList<Item> items = new ArrayList<>();
 
@@ -17,11 +17,13 @@ public class Room {
         this.name = name;
     }
 
-    public void addNearbyRoom(Direction direction, Room room) {
+    public void addNearbyRoom(String direction, Room room) {
         nearbyRooms.put(direction, room);
+        room.nearbyRooms.put(getOppositeDirection(direction), this);
+
     }
 
-    public Room getRoom(Direction direction) {
+    public Room getNearbyRoom(String direction) {
         return nearbyRooms.get(direction);
     }
 
@@ -38,7 +40,37 @@ public class Room {
         return null;
     }
 
+    public static String getOppositeDirection(String direction) { // I figured this was probably worth making a static function
+        switch (direction) {
+            case "west" -> {
+                return "east";
+            }
+            case "east" -> {
+                return "west";
+            }
+            case "north" -> {
+                return "south";
+            }
+            case "south" -> {
+                return "north";
+            }
+            case "up" -> {
+                return "down";
+            }
+            case "down" -> {
+                return "up";
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
     public String toString() {
-        return name;
+         String result = "You are standing in the " + name;
+        for (Item i: items) {
+            result = result.concat("\nThere is a " + i);
+        }
+        return result;
     }
 }
