@@ -19,8 +19,7 @@ public class Room {
 
     public void addNearbyRoom(String direction, Room room) {
         nearbyRooms.put(direction, room);
-        room.nearbyRooms.put(getOppositeDirection(direction), this);
-
+        room.nearbyRooms.put(getOppositeDirection(direction), this); // Add the way back
     }
 
     public Room getNearbyRoom(String direction) {

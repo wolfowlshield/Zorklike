@@ -37,15 +37,16 @@ public class Main {
             System.out.println(player.getCurrentRoom());
             System.out.println("What do you want to do?");
             userInput = input.nextLine().toLowerCase(Locale.ROOT);
-            for (String i: new String[]{"the ","a ","to "}) { // Add helping words here so that they can be ignored
-                if (userInput.contains(i)) {
-                    userInput = userInput.replace(i, "");
-                }
-            }
+
             if (userInput.contains(" ")) {
+                for (String i: new String[]{"the ","a ","to ","up "}) { // Add helping words here so that they can be ignored
+                    if (userInput.contains(i)) {
+                        userInput = userInput.replace(i, "");
+                    }
+                }
                 subject = userInput.substring(userInput.indexOf(' ') + 1);
                 userInput = userInput.replace(subject, "");
-                userInput = userInput.replace(" ", ""); // Whole ton of wording madness
+                userInput = userInput.replace(" ", "");
             }
 
             switch (userInput) { // Ooo! New format! Thanks, IntelliJ!
@@ -64,7 +65,7 @@ public class Main {
                         System.out.println("Theres no room there");
                     }
                 }
-                case "grab" -> {
+                case "grab","pick" -> {
                     if (subject == null) {
                         System.out.println("Grab what?");
                         subject = input.nextLine();
