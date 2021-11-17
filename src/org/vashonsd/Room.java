@@ -10,6 +10,7 @@ public class Room {
     HashMap<String, Room> nearbyRooms = new HashMap<>();
 
     ArrayList<Item> items = new ArrayList<>();
+    ArrayList<Character> nonPlayers = new ArrayList<>();
 
     String name;
 
@@ -69,6 +70,9 @@ public class Room {
          String result = "You are standing in the " + name;
         for (Item i: items) {
             result = result.concat("\nThere is a " + i);
+        }
+        for (Character c: nonPlayers) {
+            result = result.concat("\nYou see " + c.getName());
         }
         return result;
     }
