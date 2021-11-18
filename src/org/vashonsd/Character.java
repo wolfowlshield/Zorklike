@@ -1,26 +1,29 @@
 package org.vashonsd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Character {
 
     private Room currentRoom;
-
     public String name;
 
-    ArrayList<Item> heldItems = new ArrayList<>();
 
-    // Should also have a dictionary for equipped items
+    ArrayList<Item> heldItems = new ArrayList<>();
+    HashMap<String, EquippableItem> equipment = new HashMap<>();
 
     public Character(Room startingRoom) {
         currentRoom = startingRoom;
         name = "player";
+        initEquipment();
     }
 
     public Character(Room startingRoom, String name) {
         currentRoom = startingRoom;
         startingRoom.nonPlayers.add(this);
         this.name = name;
+        initEquipment();
     }
 
     public void moveRoom(Room room) {
@@ -36,6 +39,9 @@ public class Character {
     public ArrayList<Item> getInventory(){
         return heldItems;
     }
+    public HashMap<String, EquippableItem> getEquipment() {
+        return equipment;
+    }
 
     public void addItem(Item item) { // Change this to a pickup Item method
         heldItems.add(item);
@@ -45,7 +51,16 @@ public class Character {
         currentRoom.addItem(item);
     }
 
+    public void equip(EquippableItem item) {
+        equipment.put(item.getEquipKey(), item);
+    }
+
     public String attack(Character enemy, Item weapon) {
         return "You attacked  " + enemy.getName() + " with a " + weapon.getName();
+    }
+
+    private void initEquipment() {
+        equipment.put("weapon", null);
+        equipment.put("armor", null);
     }
 }

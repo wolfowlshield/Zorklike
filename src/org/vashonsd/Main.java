@@ -1,8 +1,6 @@
 package org.vashonsd;
 
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -23,7 +21,10 @@ public class Main {
         Room forest = new Room("forest");
 
         new Item("letter", garden);
-        new Item("sword", dungeon);
+
+        new EquippableItem("sword", dungeon, "weapon");
+        EquippableItem equiping;
+
 
         garden.addNearbyRoom("west", parlor);
         dungeon.addNearbyRoom("up", parlor);
@@ -43,6 +44,8 @@ public class Main {
 
             directObject = deconstructor.getDirectObject();
             secondSubject = deconstructor.getPrepSubject();
+
+            equiping = null;
 
             switch (deconstructor.getVerb()) { // Ooo! New format! Thanks, IntelliJ!
                                  // Switch cases seem like they may get a lot of use in this code
@@ -80,6 +83,45 @@ public class Main {
                 case "inventory" -> {
                     for (Item i: player.getInventory()) {
                         System.out.println("You are holding a " + i.toString());
+                    }
+                }
+
+                case "equipment" -> {
+                    for (Map.Entry<String, EquippableItem> e: player.getEquipment().entrySet()) {
+                        if (e.getValue() == null) {
+                            System.out.println("For your " + e.getKey() + ", you have nothing.");
+                        } else {
+                            System.out.println("For your " + e.getKey() + ", you have " + e.getValue().getName());
+                        }
+                    }
+                }
+
+                case "equip" -> {
+                    if (directObject == null) {
+                        System.out.println("Equip what?");
+                        directObject = input.nextLine();
+                    }
+                    while (true) {
+                        for (Item i : player.getInventory()) {
+                            if (Objects.equals(i.getName(), directObject)) {
+                                equiping = (EquippableItem) i;
+                                if (i.getClass() == EquippableItem.class) {
+                                    player.equip(equiping);
+                                } else {
+                                    System.out.println("You can't equip that Item");
+                                }
+                                break;
+                            }
+                        }
+                        if (equiping == null) {
+                            System.out.println("I couldn't find an object with that name. Try entering the items name again.");
+                            directObject = input.nextLine().toLowerCase(Locale.ROOT);
+                            if (directObject.equals("exit")) {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
                     }
                 }
 
