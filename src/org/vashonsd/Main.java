@@ -23,8 +23,7 @@ public class Main {
         new Item("letter", garden);
 
         new EquippableItem("sword", dungeon, "weapon");
-        EquippableItem equiping;
-
+        new EquippableItem("old armor", forest, "armor");
 
         garden.addNearbyRoom("west", parlor);
         dungeon.addNearbyRoom("up", parlor);
@@ -45,7 +44,7 @@ public class Main {
             directObject = deconstructor.getDirectObject();
             secondSubject = deconstructor.getPrepSubject();
 
-            equiping = null;
+
 
             switch (deconstructor.getVerb()) { // Ooo! New format! Thanks, IntelliJ!
                                  // Switch cases seem like they may get a lot of use in this code
@@ -97,6 +96,8 @@ public class Main {
                 }
 
                 case "equip" -> {
+                    EquippableItem equiping = null;
+
                     if (directObject == null) {
                         System.out.println("Equip what?");
                         directObject = input.nextLine();
@@ -107,6 +108,7 @@ public class Main {
                                 equiping = (EquippableItem) i;
                                 if (i.getClass() == EquippableItem.class) {
                                     player.equip(equiping);
+                                    System.out.println("You equipped " + equiping);
                                 } else {
                                     System.out.println("You can't equip that Item");
                                 }
@@ -140,7 +142,6 @@ public class Main {
 
                 case "attack" -> {
                     Character enemy = null;
-                    Item weapon = null;
 
                     if (directObject == null) {
                         System.out.println("Who are you attacking?");
@@ -162,29 +163,11 @@ public class Main {
                         }
                     }
 
-                    // Replace the code below once you can equip a weapon
-
-                    if (secondSubject == null){
-                        System.out.println("What are you attacking with?");
-                        secondSubject = deconstructor.findNoun(input.nextLine().toLowerCase(Locale.ROOT));
+                    if (player.getEquipment().get("weapon") == null) {
+                        System.out.println("What? With your bare hands? Equip a weapon first");
+                    } else {
+                        System.out.println(player.attack(enemy, player.getEquipment().get("weapon")));
                     }
-                    while (true) {
-                        for (Item i : player.getInventory()) {
-                            if (Objects.equals(secondSubject, i.getName())) {
-                                weapon = i;
-                                break;
-                            }
-                        }
-                        if (weapon == null) {
-                            System.out.println("I couldn't find that item in your inventory. Try entering the item's name again");
-                            secondSubject = deconstructor.findNoun(input.nextLine().toLowerCase(Locale.ROOT));
-                        } else {
-                            break;
-                        }
-                    }
-
-                    System.out.println(player.attack(enemy, weapon));
-
                 }
                 // case "look" -> System.out.println(player.getCurrentRoom()); // Repetitive right now
                 default -> System.out.println("I don't know that command");
