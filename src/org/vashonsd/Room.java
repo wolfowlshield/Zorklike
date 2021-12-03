@@ -2,6 +2,7 @@ package org.vashonsd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class Room {
@@ -66,8 +67,12 @@ public class Room {
         }
     }
 
-    public String toString() {
-         String result = "You are standing in the " + name;
+    public HashMap<String, Room> getNearbyRooms() {
+        return nearbyRooms;
+    }
+
+    public String getDescription() {
+        String result = "You are standing in the " + name;
         for (Item i: items) {
             result = result.concat("\nThere is a " + i);
         }
@@ -75,5 +80,8 @@ public class Room {
             result = result.concat("\nYou see " + c.getName());
         }
         return result;
+    }
+    public String toString() {
+        return name;
     }
 }

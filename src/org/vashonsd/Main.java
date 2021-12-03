@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-        SentenceDeconstructor deconstructor = new SentenceDeconstructor();
+        SentenceDeconstructor sentence = new SentenceDeconstructor();
 
         boolean isRunning = true;
         String userInput;
@@ -19,15 +19,30 @@ public class Main {
         Room parlor = new Room("parlor");
         Room dungeon = new Room("dungeon");
         Room forest = new Room("forest");
+        Room treehouse = new Room("treehouse");
+        Room hallway = new Room("hallway");
+        Room bedroom = new Room("bedroom");
 
         new Item("letter", garden);
 
         new EquippableItem("sword", dungeon, "weapon");
         new EquippableItem("old armor", forest, "armor");
 
+        RoomMap gameMap = new RoomMap();
+
+        gameMap.addRoomToMap(garden, gameMap.generateNearbyRoomHashMap("north", forest, "west", parlor));
+        gameMap.addRoomToMap(parlor, gameMap.generateNearbyRoomHashMap("east", garden, "down", dungeon, "south", hallway));
+        gameMap.addRoomToMap(hallway, gameMap.generateNearbyRoomHashMap("north", parlor, "east", bedroom));
+        gameMap.addRoomToMap(bedroom, gameMap.generateNearbyRoomHashMap("west", hallway));
+        gameMap.addRoomToMap(dungeon, gameMap.generateNearbyRoomHashMap("up", parlor));
+        gameMap.addRoomToMap(forest, gameMap.generateNearbyRoomHashMap("south", garden, "up", treehouse));
+        gameMap.addRoomToMap(treehouse, gameMap.generateNearbyRoomHashMap("down", forest));
+
         garden.addNearbyRoom("west", parlor);
         dungeon.addNearbyRoom("up", parlor);
         forest.addNearbyRoom("south", garden);
+        parlor.addNearbyRoom("south", hallway);
+        hallway.addNearbyRoom("east", bedroom);
 
         Character player = new Character(garden);
         Character trainingDummy = new Character(forest, "dummy");
@@ -35,18 +50,18 @@ public class Main {
         while (isRunning) {
 
 
-            System.out.println(player.getCurrentRoom());
+            System.out.println(player.getCurrentRoom().getDescription());
             System.out.println("What do you want to do?");
             userInput = input.nextLine().toLowerCase(Locale.ROOT);
 
-            deconstructor.setUserSentence(userInput);
+            sentence.setUserSentence(userInput);
 
-            directObject = deconstructor.getDirectObject();
-            secondSubject = deconstructor.getPrepSubject();
+            directObject = sentence.getDirectObject();
+            secondSubject = sentence.getPrepSubject();
 
 
 
-            switch (deconstructor.getVerb()) { // Ooo! New format! Thanks, IntelliJ!
+            switch (sentence.getVerb()) { // Ooo! New format! Thanks, IntelliJ!
                                  // Switch cases seem like they may get a lot of use in this code
 
                 case "exit" -> isRunning = false;
@@ -145,7 +160,7 @@ public class Main {
 
                     if (directObject == null) {
                         System.out.println("Who are you attacking?");
-                        directObject = deconstructor.findNoun(input.nextLine().toLowerCase(Locale.ROOT));
+                        directObject = sentence.findNoun(input.nextLine().toLowerCase(Locale.ROOT));
                     }
 
                     while(true) {
@@ -157,7 +172,7 @@ public class Main {
                         }
                         if (enemy == null) {
                             System.out.println("I can't find that enemy. Try entering their name again");
-                            directObject = deconstructor.findNoun(input.nextLine().toLowerCase(Locale.ROOT));
+                            directObject = sentence.findNoun(input.nextLine().toLowerCase(Locale.ROOT));
                         } else {
                             break;
                         }
@@ -169,6 +184,9 @@ public class Main {
                         System.out.println(player.attack(enemy, player.getEquipment().get("weapon")));
                     }
                 }
+
+                case "map" -> System.out.println(gameMap.generateVisualMap(player.getCurrentRoom()));
+                
                 // case "look" -> System.out.println(player.getCurrentRoom()); // Repetitive right now
                 default -> System.out.println("I don't know that command");
             }
