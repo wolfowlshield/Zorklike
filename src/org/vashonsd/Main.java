@@ -38,12 +38,6 @@ public class Main {
         gameMap.addRoomToMap(forest, gameMap.generateNearbyRoomHashMap("south", garden, "up", treehouse));
         gameMap.addRoomToMap(treehouse, gameMap.generateNearbyRoomHashMap("down", forest));
 
-        garden.addNearbyRoom("west", parlor);
-        dungeon.addNearbyRoom("up", parlor);
-        forest.addNearbyRoom("south", garden);
-        parlor.addNearbyRoom("south", hallway);
-        hallway.addNearbyRoom("east", bedroom);
-
         Character player = new Character(garden);
         Character trainingDummy = new Character(forest, "dummy");
 
@@ -71,7 +65,8 @@ public class Main {
                         System.out.println("Move where?");
                         directObject = input.nextLine();
                     }
-                    Room nextRoom = player.getCurrentRoom().getNearbyRoom(directObject);
+                    Room nextRoom = gameMap.getNearbyRoomDictionary().get(player.getCurrentRoom()).get(directObject);
+
                     if (nextRoom != null) {
                         player.moveRoom(nextRoom);
                     } else {
@@ -111,7 +106,7 @@ public class Main {
                 }
 
                 case "equip" -> {
-                    EquippableItem equiping = null;
+                    EquippableItem equipping = null;
 
                     if (directObject == null) {
                         System.out.println("Equip what?");
@@ -120,17 +115,17 @@ public class Main {
                     while (true) {
                         for (Item i : player.getInventory()) {
                             if (Objects.equals(i.getName(), directObject)) {
-                                equiping = (EquippableItem) i;
+                                equipping = (EquippableItem) i;
                                 if (i.getClass() == EquippableItem.class) {
-                                    player.equip(equiping);
-                                    System.out.println("You equipped " + equiping);
+                                    player.equip(equipping);
+                                    System.out.println("You equipped " + equipping);
                                 } else {
                                     System.out.println("You can't equip that Item");
                                 }
                                 break;
                             }
                         }
-                        if (equiping == null) {
+                        if (equipping == null) {
                             System.out.println("I couldn't find an object with that name. Try entering the items name again.");
                             directObject = input.nextLine().toLowerCase(Locale.ROOT);
                             if (directObject.equals("exit")) {
@@ -186,7 +181,7 @@ public class Main {
                 }
 
                 case "map" -> System.out.println(gameMap.generateVisualMap(player.getCurrentRoom()));
-                
+
                 // case "look" -> System.out.println(player.getCurrentRoom()); // Repetitive right now
                 default -> System.out.println("I don't know that command");
             }

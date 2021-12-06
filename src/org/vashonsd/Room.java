@@ -8,7 +8,6 @@ import java.util.Objects;
 public class Room {
 
     // public enum Direction {EAST, WEST, NORTH, SOUTH, UP, DOWN}
-    HashMap<String, Room> nearbyRooms = new HashMap<>();
 
     ArrayList<Item> items = new ArrayList<>();
     ArrayList<Character> nonPlayers = new ArrayList<>();
@@ -17,15 +16,6 @@ public class Room {
 
     public Room(String name) {
         this.name = name;
-    }
-
-    public void addNearbyRoom(String direction, Room room) {
-        nearbyRooms.put(direction, room);
-        room.nearbyRooms.put(getOppositeDirection(direction), this); // Add the way back
-    }
-
-    public Room getNearbyRoom(String direction) {
-        return nearbyRooms.get(direction);
     }
 
     public void addItem(Item item) {
@@ -65,10 +55,6 @@ public class Room {
                 return null;
             }
         }
-    }
-
-    public HashMap<String, Room> getNearbyRooms() {
-        return nearbyRooms;
     }
 
     public String getDescription() {

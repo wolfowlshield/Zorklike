@@ -10,7 +10,7 @@ public class RoomMap {
     Room empty = new Room("");
 
     public RoomMap() {
-
+        addRoomToMap(empty, new HashMap<>());
     }
 
     public void addRoomToMap(Room room, HashMap<String, Room> nearbyRooms) {
@@ -69,7 +69,7 @@ public class RoomMap {
 
         for (int layer = 0; layer < 3; layer++) {
             for (int room = 0; room < 3; room++) {
-                if (orderedMap.get(room + layer * 3).getNearbyRooms().containsKey("north")) {
+                if (nearbyRoomDictionary.get(orderedMap.get(room + layer * 3)).containsKey("north")) {
                     visMap = visMap.concat("|-----||-----");
                 } else {
                     visMap = visMap.concat("|------------");
@@ -78,7 +78,7 @@ public class RoomMap {
             visMap = visMap.concat("|\n");
 
             for (int room = 0; room < 3; room++) {
-                if (orderedMap.get(room + layer * 3).getNearbyRooms().containsKey("west")) {
+                if (nearbyRoomDictionary.get(orderedMap.get(room + layer * 3)).containsKey("west")) {
                     visMap = visMap.concat("= ");
                 } else {
                     visMap = visMap.concat("| ");
@@ -89,17 +89,17 @@ public class RoomMap {
                         visMap = visMap.concat(" ");
                     }
                 } else {
-                    visMap = visMap.concat(orderedMap.get(room + layer * 3).toString().substring(0, 9) + " ");
+                    visMap = visMap.concat(orderedMap.get(room + layer * 3).toString().substring(0, 10) + " ");
                 }
             }
-            if (orderedMap.get(2 + layer * 3).getNearbyRooms().containsKey("east")) {
+            if (nearbyRoomDictionary.get(orderedMap.get(2 + layer * 3)).containsKey("east")) {
                 visMap = visMap.concat("=\n");
             } else {
                 visMap = visMap.concat("|\n");
             }
         }
         for (int room = 0; room < 3; room++) {
-            if (orderedMap.get(room + 6).getNearbyRooms().containsKey("south")) {
+            if (nearbyRoomDictionary.get(orderedMap.get(room + 6)).containsKey("south")) {
                 visMap = visMap.concat("|-----||-----");
             } else {
                 visMap = visMap.concat("|------------");
@@ -111,21 +111,22 @@ public class RoomMap {
     }
 
     public void findAllNearbyRooms(Room currentRoom) {
-        if (currentRoom.getNearbyRooms().containsKey("west") && !smallMap.containsKey(currentRoom.getNearbyRoom("west")) && (smallMap.get(currentRoom) / 10) > 0) {
-            smallMap.put(currentRoom.getNearbyRoom("west"), smallMap.get(currentRoom) - 10);
-            findAllNearbyRooms(currentRoom.getNearbyRoom("west"));
+        if (nearbyRoomDictionary.get(currentRoom).containsKey("west") && !smallMap.containsKey(nearbyRoomDictionary.get(currentRoom).get("west")) && (smallMap.get(currentRoom) / 10) > 0) {
+            smallMap.put(nearbyRoomDictionary.get(currentRoom).get("west"), smallMap.get(currentRoom) - 10);
+            findAllNearbyRooms(nearbyRoomDictionary.get(currentRoom).get("west"));
+
         }
-        if (currentRoom.getNearbyRooms().containsKey("north") && !smallMap.containsKey(currentRoom.getNearbyRoom("north")) && (smallMap.get(currentRoom) % 10) < 2) {
-            smallMap.put(currentRoom.getNearbyRoom("north"), smallMap.get(currentRoom) + 1);
-            findAllNearbyRooms(currentRoom.getNearbyRoom("north"));
+        if (nearbyRoomDictionary.get(currentRoom).containsKey("north") && !smallMap.containsKey(nearbyRoomDictionary.get(currentRoom).get("north")) && (smallMap.get(currentRoom) % 10) < 2) {
+            smallMap.put(nearbyRoomDictionary.get(currentRoom).get("north"), smallMap.get(currentRoom) + 1);
+            findAllNearbyRooms(nearbyRoomDictionary.get(currentRoom).get("north"));
         }
-        if (currentRoom.getNearbyRooms().containsKey("east") && !smallMap.containsKey(currentRoom.getNearbyRoom("east")) && (smallMap.get(currentRoom) / 10) < 2) {
-            smallMap.put(currentRoom.getNearbyRoom("east"), smallMap.get(currentRoom) + 10);
-            findAllNearbyRooms(currentRoom.getNearbyRoom("east"));
+        if (nearbyRoomDictionary.get(currentRoom).containsKey("east") && !smallMap.containsKey(nearbyRoomDictionary.get(currentRoom).get("east")) && (smallMap.get(currentRoom) / 10) < 2) {
+            smallMap.put(nearbyRoomDictionary.get(currentRoom).get("east"), smallMap.get(currentRoom) + 10);
+            findAllNearbyRooms(nearbyRoomDictionary.get(currentRoom).get("east"));
         }
-        if (currentRoom.getNearbyRooms().containsKey("south") && !smallMap.containsKey(currentRoom.getNearbyRoom("south")) && (smallMap.get(currentRoom) % 10) > 0) {
-            smallMap.put(currentRoom.getNearbyRoom("south"), smallMap.get(currentRoom) - 1);
-            findAllNearbyRooms(currentRoom.getNearbyRoom("south"));
+        if (nearbyRoomDictionary.get(currentRoom).containsKey("south") && !smallMap.containsKey(nearbyRoomDictionary.get(currentRoom).get("south")) && (smallMap.get(currentRoom) % 10) > 0) {
+            smallMap.put(nearbyRoomDictionary.get(currentRoom).get("south"), smallMap.get(currentRoom) - 1);
+            findAllNearbyRooms(nearbyRoomDictionary.get(currentRoom).get("south"));
         }
     }
 }
