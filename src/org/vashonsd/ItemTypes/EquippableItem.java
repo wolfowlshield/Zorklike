@@ -1,6 +1,9 @@
-package org.vashonsd;
+package org.vashonsd.ItemTypes;
 
-public class EquippableItem extends Item{
+import org.vashonsd.ItemTypes.Item;
+import org.vashonsd.Room;
+
+public class EquippableItem extends Item {
 
     String equipKey;
 

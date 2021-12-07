@@ -1,8 +1,8 @@
 package org.vashonsd;
 
+import org.vashonsd.ItemTypes.Item;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class Room {

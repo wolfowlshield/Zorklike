@@ -1,4 +1,6 @@
-package org.vashonsd;
+package org.vashonsd.ItemTypes;
+
+import org.vashonsd.Room;
 
 public class Item {
 

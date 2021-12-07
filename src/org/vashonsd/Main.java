@@ -1,5 +1,9 @@
 package org.vashonsd;
 
+import org.vashonsd.ItemTypes.EquippableItem;
+import org.vashonsd.ItemTypes.Item;
+import org.vashonsd.ItemTypes.ReadableItem;
+
 import java.util.*;
 
 public class Main {
@@ -23,13 +27,14 @@ public class Main {
         Room hallway = new Room("hallway");
         Room bedroom = new Room("bedroom");
 
-        new Item("letter", garden);
+        new Item("stick", forest);
 
         new EquippableItem("sword", dungeon, "weapon");
         new EquippableItem("old armor", forest, "armor");
 
-        RoomMap gameMap = new RoomMap();
+        ReadableItem letter = new ReadableItem("letter", garden);
 
+        RoomMap gameMap = new RoomMap();
         gameMap.addRoomToMap(garden, gameMap.generateNearbyRoomHashMap("north", forest, "west", parlor));
         gameMap.addRoomToMap(parlor, gameMap.generateNearbyRoomHashMap("east", garden, "down", dungeon, "south", hallway));
         gameMap.addRoomToMap(hallway, gameMap.generateNearbyRoomHashMap("north", parlor, "east", bedroom));
@@ -41,6 +46,8 @@ public class Main {
         Character player = new Character(garden);
         Character trainingDummy = new Character(forest, "dummy");
 
+        letter.setText("Hope you can read this! Thanks for playing this game!");
+
         while (isRunning) {
 
 
@@ -51,7 +58,7 @@ public class Main {
             sentence.setUserSentence(userInput);
 
             directObject = sentence.getDirectObject();
-            secondSubject = sentence.getPrepSubject();
+            // secondSubject = sentence.getPrepSubject();
 
 
 
@@ -181,6 +188,23 @@ public class Main {
                 }
 
                 case "map" -> System.out.println(gameMap.generateVisualMap(player.getCurrentRoom()));
+
+                case "read" -> {
+                    if (directObject == null) {
+                        System.out.println("Read what?");
+                        directObject = input.nextLine();
+                    }
+                    for (Item i: player.getInventory()) {
+                        if (Objects.equals(i.toString(), directObject)) {
+                            if (i.getClass() == ReadableItem.class) {
+                                System.out.println("It reads \"" + ((ReadableItem) i).getText() + "\"");
+                            } else {
+                                System.out.println("You can't read that Item");
+                            }
+                            break;
+                        }
+                    }
+                }
 
                 // case "look" -> System.out.println(player.getCurrentRoom()); // Repetitive right now
                 default -> System.out.println("I don't know that command");

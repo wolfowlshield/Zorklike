@@ -49,6 +49,7 @@ public class RoomMap {
         orderedMap.clear();
         int orderedMapSize = 0;
 
+
         smallMap.put(centerRoom, 11);
         findAllNearbyRooms(centerRoom);
 
@@ -83,13 +84,29 @@ public class RoomMap {
                 } else {
                     visMap = visMap.concat("| ");
                 }
-                if (orderedMap.get(room + layer * 3).toString().length() <= 10) {
-                    visMap = visMap.concat(orderedMap.get(room + layer * 3).toString());
-                    while (visMap.length() < (room+1) * 13 + layer * 82 + 41) {
-                        visMap = visMap.concat(" ");
+
+                String roomName = orderedMap.get(room + layer * 3).toString();
+                if (nearbyRoomDictionary.get(orderedMap.get(room + layer * 3)).containsKey("down")) {
+                    roomName = "v " + roomName;
+                }
+                if ((roomName.length() <= 10 && !nearbyRoomDictionary.get(orderedMap.get(room + layer * 3)).containsKey("up")) || roomName.length() <= 8) {
+                    visMap = visMap.concat(roomName);
+                    if (nearbyRoomDictionary.get(orderedMap.get(room + layer * 3)).containsKey("up")) {
+                        while (visMap.length() < (room + 1) * 13 + layer * 82 + 39) {
+                            visMap = visMap.concat(" ");
+                        }
+                        visMap = visMap.concat("^ ");
+                    } else {
+                        while (visMap.length() < (room + 1) * 13 + layer * 82 + 41) {
+                            visMap = visMap.concat(" ");
+                        }
                     }
                 } else {
-                    visMap = visMap.concat(orderedMap.get(room + layer * 3).toString().substring(0, 10) + " ");
+                    if (nearbyRoomDictionary.get(orderedMap.get(room + layer * 3)).containsKey("up")) {
+                        visMap = visMap.concat(roomName.substring(0, 8) + " ^ ");
+                    } else {
+                        visMap = visMap.concat(roomName.substring(0, 10) + " ");
+                    }
                 }
             }
             if (nearbyRoomDictionary.get(orderedMap.get(2 + layer * 3)).containsKey("east")) {

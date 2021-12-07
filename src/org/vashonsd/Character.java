@@ -1,8 +1,10 @@
 package org.vashonsd;
 
+import org.vashonsd.ItemTypes.EquippableItem;
+import org.vashonsd.ItemTypes.Item;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Character {
 
