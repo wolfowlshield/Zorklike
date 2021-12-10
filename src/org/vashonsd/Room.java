@@ -24,11 +24,15 @@ public class Room {
 
     public Item getItem(String itemName) {
         for (Item i:items) {
-            if (Objects.equals(i.getName(), itemName)) {
+            if (Objects.equals(i.toString(), itemName)) {
                 return i;
             }
         }
         return null;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
     public static String getOppositeDirection(String direction) { // I figured this was probably worth making a static function

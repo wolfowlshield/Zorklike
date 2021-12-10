@@ -11,11 +11,7 @@ public class Item {
         room.addItem(this); // Beautiful
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String toString() {
-        return name; // Add an item description here too
+        return name;
     }
 }

@@ -58,7 +58,7 @@ public class Character {
     }
 
     public String attack(Character enemy, Item weapon) {
-        return "You attacked  " + enemy.getName() + " with a " + weapon.getName();
+        return "You attacked  " + enemy.getName() + " with a " + weapon;
     }
 
     private void initEquipment() {
